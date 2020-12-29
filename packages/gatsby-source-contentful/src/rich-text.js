@@ -9,6 +9,11 @@ function renderRichText({ raw, references }, options = {}) {
     return documentToReactComponents(richText, options)
   }
 
+  // fail fast if no __typename is present
+	if (references.some(({__typename}) => !__typename)) {
+		throw new Error('all references should include __typename for renderRichText')
+	}
+
   // Create dummy response so we can use official libraries for resolving the entries
   const dummyResponse = {
     items: [
